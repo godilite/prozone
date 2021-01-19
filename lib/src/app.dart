@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:prozone/src/ui/provider_list.dart';
 
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
+import 'ui/shared/routes.dart';
 
-class _AppState extends State<App> {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Colors.transparent, elevation: 0)),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: ProviderList(),
+      ),
+      routes: Routes.getRoutes(),
+    );
   }
 }
