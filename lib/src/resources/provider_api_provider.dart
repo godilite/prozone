@@ -4,8 +4,9 @@ import 'package:prozone/src/models/state.dart';
 import 'package:prozone/src/resources/api_key.dart';
 
 class ProviderApiProvider {
-  var dio = Dio();
   static const baseUrl = 'https://pro-zone.herokuapp.com';
+  var dio = Dio();
+
   final _apiKey = APIKEY;
 
   Future<State> fetchProviderList() async {
