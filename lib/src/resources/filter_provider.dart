@@ -32,4 +32,7 @@ class FilterProvider {
         .toList();
     return State<List<ProviderType>>.success(results);
   }
+
+  Future<List> getUnboardingStatus() => Future.delayed(
+      Duration(milliseconds: 1), () => ['Pending', 'Active', 'Deleted']);
 }

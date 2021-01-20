@@ -135,7 +135,8 @@ class _FilterWidgetState extends State<FilterWidget> {
 
   @override
   void initState() {
-    filterBloc.fetchFilters();
+    filterBloc.fetchProviderTypes();
+    filterBloc.fetchStatus();
     super.initState();
   }
 
@@ -144,14 +145,17 @@ class _FilterWidgetState extends State<FilterWidget> {
     return Drawer(
       elevation: 0,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           DrawerHeader(
-            child: Text(
-              'Filter',
-              style: heading,
+            child: Center(
+              child: Text(
+                'Filters',
+                style: heading,
+              ),
             ),
           ),
-          Text('Filter by Provider Type'),
+          Text('Filter by Provider Type', style: subHeading),
           StreamBuilder(
               stream: filterBloc.types,
               builder: (context, snap) {
@@ -159,33 +163,77 @@ class _FilterWidgetState extends State<FilterWidget> {
                     ? Wrap(
                         children: snap.data
                             .map<Widget>(
-                              (ProviderType x) => FilterItem(),
+                              (ProviderType x) => FilterTypeItem(
+                                type: x,
+                              ),
                             )
                             .toList(),
                       )
                     : Container();
               }),
-          Text('Filter by Onboarding Status')
+          SizedBox(
+            height: 50,
+          ),
+          Text('Filter by Onboarding Status', style: subHeading),
+          StreamBuilder(
+              stream: filterBloc.status,
+              builder: (context, snap) {
+                return snap.hasData
+                    ? Wrap(
+                        children: snap.data
+                            .map<Widget>(
+                              (x) => FilterStatusItem(
+                                status: x,
+                              ),
+                            )
+                            .toList(),
+                      )
+                    : Container();
+              }),
         ],
       ),
     );
   }
 }
 
-class FilterItem extends StatefulWidget {
+class FilterTypeItem extends StatefulWidget {
   final ProviderType type;
-  const FilterItem({Key key, this.type}) : super(key: key);
+  const FilterTypeItem({Key key, this.type}) : super(key: key);
 
   @override
-  _FilterItemState createState() => _FilterItemState();
+  _FilterTypeItemState createState() => _FilterTypeItemState();
 }
 
-class _FilterItemState extends State<FilterItem> {
+class _FilterTypeItemState extends State<FilterTypeItem> {
   bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return FilterChip(
       label: Text(widget.type.name),
+      selected: isSelected,
+      onSelected: (bool selected) {
+        setState(() {
+          isSelected = selected;
+        });
+      },
+    );
+  }
+}
+
+class FilterStatusItem extends StatefulWidget {
+  final String status;
+  const FilterStatusItem({Key key, this.status}) : super(key: key);
+
+  @override
+  _FilterStatusItemState createState() => _FilterStatusItemState();
+}
+
+class _FilterStatusItemState extends State<FilterStatusItem> {
+  bool isSelected = false;
+  @override
+  Widget build(BuildContext context) {
+    return FilterChip(
+      label: Text(widget.status),
       selected: isSelected,
       onSelected: (bool selected) {
         setState(() {

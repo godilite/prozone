@@ -13,6 +13,7 @@ class Repository {
       _providerApiProvider.searchProviderByName(name);
 
   Future<State> fetchProviderType() => _filterProvider.fetchProviderType();
+  Future<List> fetchStatus() => _filterProvider.getUnboardingStatus();
 }
 
 final repository = Repository();
