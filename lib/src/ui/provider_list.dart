@@ -1,13 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:prozone/src/blocs/filter_bloc.dart';
 import 'package:prozone/src/blocs/provider_bloc.dart';
 import 'package:prozone/src/models/provider_model.dart';
-import 'package:prozone/src/models/provider_type.dart';
 import 'package:prozone/src/ui/shared/routes.dart';
 
 import 'shared/style.dart';
+import 'filter_drawer.dart';
 
 class ProviderList extends StatefulWidget {
   @override
@@ -101,7 +100,8 @@ class _ProviderListState extends State<ProviderList> {
 
   providerItem(ProviderModel provider) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, Routes.ProviderDetails),
+      onTap: () => Navigator.pushNamed(context, Routes.ProviderDetails,
+          arguments: {'provider': provider}),
       child: Container(
         margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -124,182 +124,6 @@ class _ProviderListState extends State<ProviderList> {
           trailing: Text(provider.activeStatus),
         ),
       ),
-    );
-  }
-}
-
-class FilterWidget extends StatefulWidget {
-  const FilterWidget({Key key}) : super(key: key);
-
-  @override
-  _FilterWidgetState createState() => _FilterWidgetState();
-}
-
-class _FilterWidgetState extends State<FilterWidget> {
-  FilterBloc filterBloc = FilterBloc();
-
-  @override
-  void initState() {
-    filterBloc.fetchProviderTypes();
-    filterBloc.fetchStatus();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      elevation: 0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          DrawerHeader(
-            child: Center(
-              child: Text(
-                'Filters',
-                style: heading,
-              ),
-            ),
-          ),
-          Text('Filter by Provider Type', style: subHeading),
-          typeStreamBuilder(),
-          SizedBox(
-            height: 50,
-          ),
-          Text('Filter by Onboarding Status', style: subHeading),
-          statusStreamBuilder(),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FilterButton(
-                color: accentOrange,
-                onPressed: () => null,
-                label: 'Reset',
-              ),
-              FilterButton(
-                color: kBlue,
-                onPressed: () => null,
-                label: 'Apply',
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  StreamBuilder typeStreamBuilder() {
-    return StreamBuilder(
-        stream: filterBloc.types,
-        builder: (context, snap) {
-          return snap.hasData
-              ? Wrap(
-                  children: snap.data
-                      .map<Widget>(
-                        (ProviderType x) => FilterTypeItem(
-                          type: x,
-                        ),
-                      )
-                      .toList(),
-                )
-              : Container();
-        });
-  }
-
-  StreamBuilder statusStreamBuilder() {
-    return StreamBuilder(
-        stream: filterBloc.status,
-        builder: (context, snap) {
-          return snap.hasData
-              ? Wrap(
-                  children: snap.data
-                      .map<Widget>(
-                        (x) => FilterStatusItem(
-                          status: x,
-                        ),
-                      )
-                      .toList(),
-                )
-              : Container();
-        });
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  final Color color;
-  final Function() onPressed;
-  final String label;
-  const FilterButton(
-      {Key key,
-      @required this.color,
-      @required this.onPressed,
-      @required this.label})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      color: color,
-      onPressed: onPressed,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class FilterTypeItem extends StatefulWidget {
-  final ProviderType type;
-  const FilterTypeItem({Key key, this.type}) : super(key: key);
-
-  @override
-  _FilterTypeItemState createState() => _FilterTypeItemState();
-}
-
-class _FilterTypeItemState extends State<FilterTypeItem> {
-  bool isSelected = false;
-  @override
-  Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(widget.type.name),
-      selected: isSelected,
-      onSelected: (bool selected) {
-        setState(() {
-          isSelected = selected;
-        });
-      },
-    );
-  }
-}
-
-class FilterStatusItem extends StatefulWidget {
-  final String status;
-  const FilterStatusItem({Key key, this.status}) : super(key: key);
-
-  @override
-  _FilterStatusItemState createState() => _FilterStatusItemState();
-}
-
-class _FilterStatusItemState extends State<FilterStatusItem> {
-  bool isSelected = false;
-  @override
-  Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(widget.status),
-      selected: isSelected,
-      onSelected: (bool selected) {
-        setState(() {
-          isSelected = selected;
-        });
-      },
     );
   }
 }
