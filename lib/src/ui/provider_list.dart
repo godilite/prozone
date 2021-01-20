@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:prozone/src/blocs/filter_bloc.dart';
 import 'package:prozone/src/blocs/provider_bloc.dart';
@@ -80,7 +82,7 @@ class _ProviderListState extends State<ProviderList> {
                           : Center(
                               child: Text(
                                 'No Providers found',
-                                style: subtrail,
+                                style: subHeading,
                               ),
                             );
                     }
@@ -98,26 +100,29 @@ class _ProviderListState extends State<ProviderList> {
   }
 
   providerItem(ProviderModel provider) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(0, 2),
-                blurRadius: 6,
-                color: Colors.grey.shade200,
-                spreadRadius: 6)
-          ]),
-      child: ListTile(
-        title: Text(
-          provider.name,
-          style: TextStyle(
-              color: kBlue, fontSize: 16, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, Routes.ProviderDetails),
+      child: Container(
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 2),
+                  blurRadius: 6,
+                  color: Colors.grey.shade200,
+                  spreadRadius: 6)
+            ]),
+        child: ListTile(
+          title: Text(
+            provider.name,
+            style: TextStyle(
+                color: kBlue, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(provider.address),
+          trailing: Text(provider.activeStatus),
         ),
-        subtitle: Text(provider.address),
-        trailing: Text(provider.activeStatus),
       ),
     );
   }
@@ -156,41 +161,96 @@ class _FilterWidgetState extends State<FilterWidget> {
             ),
           ),
           Text('Filter by Provider Type', style: subHeading),
-          StreamBuilder(
-              stream: filterBloc.types,
-              builder: (context, snap) {
-                return snap.hasData
-                    ? Wrap(
-                        children: snap.data
-                            .map<Widget>(
-                              (ProviderType x) => FilterTypeItem(
-                                type: x,
-                              ),
-                            )
-                            .toList(),
-                      )
-                    : Container();
-              }),
+          typeStreamBuilder(),
           SizedBox(
             height: 50,
           ),
           Text('Filter by Onboarding Status', style: subHeading),
-          StreamBuilder(
-              stream: filterBloc.status,
-              builder: (context, snap) {
-                return snap.hasData
-                    ? Wrap(
-                        children: snap.data
-                            .map<Widget>(
-                              (x) => FilterStatusItem(
-                                status: x,
-                              ),
-                            )
-                            .toList(),
-                      )
-                    : Container();
-              }),
+          statusStreamBuilder(),
+          SizedBox(
+            height: 50,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FilterButton(
+                color: accentOrange,
+                onPressed: () => null,
+                label: 'Reset',
+              ),
+              FilterButton(
+                color: kBlue,
+                onPressed: () => null,
+                label: 'Apply',
+              ),
+            ],
+          )
         ],
+      ),
+    );
+  }
+
+  StreamBuilder typeStreamBuilder() {
+    return StreamBuilder(
+        stream: filterBloc.types,
+        builder: (context, snap) {
+          return snap.hasData
+              ? Wrap(
+                  children: snap.data
+                      .map<Widget>(
+                        (ProviderType x) => FilterTypeItem(
+                          type: x,
+                        ),
+                      )
+                      .toList(),
+                )
+              : Container();
+        });
+  }
+
+  StreamBuilder statusStreamBuilder() {
+    return StreamBuilder(
+        stream: filterBloc.status,
+        builder: (context, snap) {
+          return snap.hasData
+              ? Wrap(
+                  children: snap.data
+                      .map<Widget>(
+                        (x) => FilterStatusItem(
+                          status: x,
+                        ),
+                      )
+                      .toList(),
+                )
+              : Container();
+        });
+  }
+}
+
+class FilterButton extends StatelessWidget {
+  final Color color;
+  final Function() onPressed;
+  final String label;
+  const FilterButton(
+      {Key key,
+      @required this.color,
+      @required this.onPressed,
+      @required this.label})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      color: color,
+      onPressed: onPressed,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
