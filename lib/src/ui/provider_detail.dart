@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:prozone/src/blocs/image_bloc.dart';
 import 'package:prozone/src/blocs/update_provider_bloc.dart';
 import 'package:prozone/src/models/provider_model.dart';
+import 'package:prozone/src/ui/shared/routes.dart';
 import 'package:prozone/src/ui/shared/style.dart';
 
 import 'widgets/provider_detail_item_widget.dart';
@@ -20,7 +24,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
   TextEditingController _providerStateCntrl = TextEditingController();
   int id;
   UpdateProviderBloc _updateProviderBloc = UpdateProviderBloc();
-
+  ImageBloc _imageBloc = ImageBloc();
   @override
   Widget build(BuildContext context) {
     final Map<String, Object> data = ModalRoute.of(context).settings.arguments;
@@ -33,6 +37,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
     _activeStatusCntrl.text = provider.activeStatus;
     _ratingCntrl.text = provider.rating.toString();
     id = provider.id;
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -51,7 +56,11 @@ class _ProviderDetailState extends State<ProviderDetail> {
                 ),
                 color: kBlue,
                 textColor: Colors.white,
-                onPressed: () => null,
+                onPressed: () async {
+                  List<File> files = await _imageBloc.selectFiles();
+                  Navigator.pushNamed(context, Routes.PreviewImage,
+                      arguments: {'files': files});
+                },
                 icon: Icon(Icons.image),
                 label: Text('Add Images')),
           )

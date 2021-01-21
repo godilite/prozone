@@ -38,8 +38,8 @@ class ProviderApiProvider {
     dio.options.headers['authorization'] = 'Bearer $_apiKey';
 
     try {
-      response = await dio
-          .get(baseUrl + "/providers", queryParameters: {"name": name});
+      response = await dio.get(baseUrl + "/providers",
+          queryParameters: {"name_contains": name});
     } on DioError catch (e) {
       if (e.response != null) {
         return State<String>.error(e.response.data['message']);

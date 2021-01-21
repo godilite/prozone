@@ -11,7 +11,6 @@ class UpdateProviderBloc {
   final BehaviorSubject _nameController = BehaviorSubject<String>();
   final BehaviorSubject _descriptionController = BehaviorSubject<String>();
   final BehaviorSubject _hasError = BehaviorSubject<String>();
-//  final BehaviorSubject _imageController = BehaviorSubject<File>();
 
   Function(String) get changeAddress => _addressController.sink.add;
 
@@ -82,6 +81,8 @@ class UpdateProviderBloc {
     _descriptionController.close();
     _loadingData.close();
     _hasError.close();
+    _activeStatusController.close();
+    _stateController.close();
     // _imageController.close();
   }
 }
