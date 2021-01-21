@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prozone/src/blocs/search_bloc.dart';
 import 'package:prozone/src/models/provider_model.dart';
+import 'package:prozone/src/ui/widgets/provider_list_item.dart';
 
 import 'shared/style.dart';
 
@@ -43,7 +44,8 @@ class _SearchViewState extends State<SearchView> {
                           ? ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) {
-                                return providerItem(snapshot.data[index]);
+                                return ProviderListItem(
+                                    provider: snapshot.data[index]);
                               })
                           : Center(
                               child: Text(
@@ -82,25 +84,4 @@ class _SearchViewState extends State<SearchView> {
           ),
         );
       });
-
-  providerItem(ProviderModel provider) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(0, 2),
-                blurRadius: 6,
-                color: Colors.grey.shade200,
-                spreadRadius: 6)
-          ]),
-      child: ListTile(
-        title: Text(provider.name),
-        subtitle: Text(provider.address),
-        trailing: Text(provider.activeStatus),
-      ),
-    );
-  }
 }

@@ -79,21 +79,25 @@ class _CreateProviderState extends State<CreateProvider> {
         },
       );
 
-  Widget submitButton() => Container(
-        height: 45,
-        child: SizedBox.expand(
-          child: RaisedButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            onPressed: () => createProviderBloc.submit(),
-            child: Text(
-              'Update Provider Details',
-              style: TextStyle(color: Colors.white),
+  Widget submitButton() => StreamBuilder<bool>(
+      stream: createProviderBloc.submitValid,
+      builder: (context, snap) {
+        return Container(
+          height: 45,
+          child: SizedBox.expand(
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              onPressed: (!snap.hasData) ? null : createProviderBloc.submit,
+              child: Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: kBlue,
             ),
-            color: kBlue,
           ),
-        ),
-      );
+        );
+      });
 
   Widget providerName() => StreamBuilder<String>(
       stream: createProviderBloc.name,

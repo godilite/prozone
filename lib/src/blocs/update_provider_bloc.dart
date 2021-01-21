@@ -1,22 +1,23 @@
-import 'package:prozone/src/app.dart';
 import 'package:prozone/src/blocs/provider_bloc.dart';
+import 'package:prozone/src/models/provider_type.dart';
+import 'package:prozone/src/models/state_model.dart';
 import 'package:prozone/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UpdateProviderBloc {
   final BehaviorSubject _addressController = BehaviorSubject<String>();
   final BehaviorSubject _activeStatusController = BehaviorSubject<String>();
-  final BehaviorSubject _stateController = BehaviorSubject<String>();
+  final BehaviorSubject _stateController = BehaviorSubject<StateModel>();
   final PublishSubject _loadingData = PublishSubject<bool>();
   final BehaviorSubject _ratingController = BehaviorSubject<String>();
-  final BehaviorSubject _typeController = BehaviorSubject<String>();
+  final BehaviorSubject _typeController = BehaviorSubject<ProviderType>();
   final BehaviorSubject _nameController = BehaviorSubject<String>();
   final BehaviorSubject _descriptionController = BehaviorSubject<String>();
   final BehaviorSubject _hasError = BehaviorSubject<String>();
 
   Function(String) get changeAddress => _addressController.sink.add;
 
-  Function(String) get changeState => _stateController.sink.add;
+  Function(StateModel) get changeState => _stateController.sink.add;
 
   Function(String) get changeActiveStatus => _activeStatusController.sink.add;
 
@@ -26,7 +27,7 @@ class UpdateProviderBloc {
 
   Function(String) get changeRating => _ratingController.sink.add;
 
-  Function(String) get changeType => _typeController.sink.add;
+  Function(ProviderType) get changeType => _typeController.sink.add;
 
   Stream get address => _addressController.stream;
 
@@ -53,7 +54,7 @@ class UpdateProviderBloc {
       "rating": _ratingController.value,
       "description": _descriptionController.value,
       "name": _nameController.value,
-      "type": _typeController.value,
+      "provider_type": _typeController.value,
       "state": _stateController.value,
       "active_status": _activeStatusController.value
     };
@@ -79,3 +80,5 @@ class UpdateProviderBloc {
     _stateController.close();
   }
 }
+
+final updateProviderBloc = UpdateProviderBloc();

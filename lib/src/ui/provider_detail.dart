@@ -1,12 +1,18 @@
 import 'dart:io';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:prozone/src/blocs/image_bloc.dart';
+import 'package:prozone/src/blocs/provider_state_bloc.dart';
+import 'package:prozone/src/blocs/provider_type_bloc.dart';
 import 'package:prozone/src/blocs/update_provider_bloc.dart';
 import 'package:prozone/src/models/provider_model.dart';
+import 'package:prozone/src/models/provider_type.dart';
+import 'package:prozone/src/models/state_model.dart';
 import 'package:prozone/src/ui/shared/routes.dart';
 import 'package:prozone/src/ui/shared/style.dart';
 
+import 'widgets/drop_down_input.dart';
 import 'widgets/provider_detail_item_widget.dart';
 
 class ProviderDetail extends StatefulWidget {
@@ -23,7 +29,6 @@ class _ProviderDetailState extends State<ProviderDetail> {
   TextEditingController _providerTypeCntrl = TextEditingController();
   TextEditingController _providerStateCntrl = TextEditingController();
   int id;
-  UpdateProviderBloc _updateProviderBloc = UpdateProviderBloc();
   ImageBloc _imageBloc = ImageBloc();
   @override
   Widget build(BuildContext context) {
@@ -76,29 +81,33 @@ class _ProviderDetailState extends State<ProviderDetail> {
               ),
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: provider.images.length,
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            offset: Offset(0, 0),
-                            blurRadius: 7,
-                            color: Colors.grey.shade200,
-                            spreadRadius: 8)
-                      ]),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4.0, vertical: 4),
-                        child: Image(
-                          image: NetworkImage(provider.images[index].url),
+                child: provider.images.isNotEmpty
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: provider.images.length,
+                        itemBuilder: (context, index) => ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0, vertical: 4),
+                              child: Image(
+                                image: NetworkImage(provider.images[index].url),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        color: kGrey,
+                        width: constraints.maxWidth,
+                        child: Center(
+                          child: Text(
+                            'No Image(s)',
+                            style: subHeading,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
               ),
               SizedBox(
                 height: 10,
@@ -107,20 +116,21 @@ class _ProviderDetailState extends State<ProviderDetail> {
                 height: 500,
                 child: ListView(
                   children: [
-                    providerName(provider, _updateProviderBloc),
-                    providerActiveStatus(provider, _updateProviderBloc),
-                    providerAddress(provider, _updateProviderBloc),
-                    providerDescription(provider, _updateProviderBloc),
-                    providerRating(provider, _updateProviderBloc),
-                    providerName(provider, _updateProviderBloc),
+                    providerName(provider),
+                    providerActiveStatus(),
+                    providerAddress(provider),
+                    providerDescription(provider),
+                    providerRating(provider),
+                    providerState(),
+                    providerType(),
                     SizedBox(
                       height: 30,
                     ),
-                    submitButton(_updateProviderBloc, id),
+                    submitButton(id),
                     SizedBox(
                       height: 10,
                     ),
-                    loadingIndicator(_updateProviderBloc),
+                    loadingIndicator(),
                     SizedBox(
                       height: constraints.maxHeight * 0.10,
                     ),
@@ -134,8 +144,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
     );
   }
 
-  Widget loadingIndicator(UpdateProviderBloc updateProviderBloc) =>
-      StreamBuilder<bool>(
+  Widget loadingIndicator() => StreamBuilder<bool>(
         stream: updateProviderBloc.loading,
         builder: (context, snap) {
           return Container(
@@ -146,7 +155,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
         },
       );
 
-  Widget submitButton(UpdateProviderBloc updateProviderBloc, id) => Container(
+  Widget submitButton(id) => Container(
         height: 45,
         child: SizedBox.expand(
           child: RaisedButton(
@@ -163,7 +172,8 @@ class _ProviderDetailState extends State<ProviderDetail> {
       );
 
   Widget providerName(
-          ProviderModel provider, UpdateProviderBloc updateProviderBloc) =>
+    ProviderModel provider,
+  ) =>
       StreamBuilder<String>(
           stream: updateProviderBloc.name,
           builder: (context, snap) {
@@ -175,7 +185,8 @@ class _ProviderDetailState extends State<ProviderDetail> {
           });
 
   Widget providerAddress(
-          ProviderModel provider, UpdateProviderBloc updateProviderBloc) =>
+    ProviderModel provider,
+  ) =>
       StreamBuilder<String>(
           stream: updateProviderBloc.address,
           builder: (context, snap) {
@@ -187,19 +198,37 @@ class _ProviderDetailState extends State<ProviderDetail> {
           });
 
   Widget providerRating(
-          ProviderModel provider, UpdateProviderBloc updateProviderBloc) =>
+    ProviderModel provider,
+  ) =>
       StreamBuilder<String>(
           stream: updateProviderBloc.rating,
           builder: (context, snap) {
-            return ProviderDetailItem(
-              title: "Provider Rating",
-              cntrl: _ratingCntrl,
-              onChange: updateProviderBloc.changeRating,
+            return DropDownInput(
+              title: 'Provider Rating',
+              dropdownSearch: DropdownSearch<String>(
+                mode: Mode.MENU,
+                showSelectedItem: true,
+                maxHeight: 150,
+                dropDownButton: Icon(Icons.arrow_drop_down, color: kBlue),
+                dropdownSearchDecoration: InputDecoration(
+                  hintText: _ratingCntrl.text,
+                  enabledBorder: border,
+                  disabledBorder: border,
+                  focusedBorder: border,
+                  border: border,
+                  alignLabelWithHint: true,
+                  contentPadding: EdgeInsets.only(left: 8),
+                ),
+                items: ["1", "2", "3", "4", "5"],
+                onChanged: updateProviderBloc.changeRating,
+                selectedItem: snap.data,
+              ),
             );
           });
 
   Widget providerDescription(
-          ProviderModel provider, UpdateProviderBloc updateProviderBloc) =>
+    ProviderModel provider,
+  ) =>
       StreamBuilder<String>(
           stream: updateProviderBloc.description,
           builder: (context, snap) {
@@ -210,15 +239,93 @@ class _ProviderDetailState extends State<ProviderDetail> {
             );
           });
 
-  Widget providerActiveStatus(
-          ProviderModel provider, UpdateProviderBloc updateProviderBloc) =>
-      StreamBuilder<String>(
-          stream: updateProviderBloc.activeStatus,
-          builder: (context, snap) {
-            return ProviderDetailItem(
-              title: 'Provider Activation Status',
-              cntrl: _activeStatusCntrl,
-              onChange: updateProviderBloc.changeActiveStatus,
-            );
-          });
+  Widget providerActiveStatus() => StreamBuilder<String>(
+      stream: updateProviderBloc.activeStatus,
+      builder: (context, snap) {
+        return DropDownInput(
+          title: 'Activation Status',
+          dropdownSearch: DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            maxHeight: 150,
+            dropDownButton: Icon(Icons.arrow_drop_down, color: kBlue),
+            dropdownSearchDecoration: InputDecoration(
+              hintText: _activeStatusCntrl.text,
+              enabledBorder: border,
+              disabledBorder: border,
+              focusedBorder: border,
+              border: border,
+              alignLabelWithHint: true,
+              contentPadding: EdgeInsets.only(left: 8),
+            ),
+            items: ["Active", "Pending", "Deleted"],
+            onChanged: updateProviderBloc.changeActiveStatus,
+            selectedItem: snap.data,
+          ),
+        );
+      });
+
+  Widget providerState() => StreamBuilder<StateModel>(
+      stream: updateProviderBloc.state,
+      builder: (context, snap) {
+        return DropDownInput(
+          title: 'Provider State',
+          dropdownSearch: StreamBuilder<List<StateModel>>(
+              stream: providerStateBloc.providerState,
+              builder: (context, stateSnapshot) {
+                return DropdownSearch<StateModel>(
+                  mode: Mode.MENU,
+                  maxHeight: 120,
+                  dropDownButton: Icon(Icons.arrow_drop_down, color: kBlue),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: _providerStateCntrl.text,
+                    enabledBorder: border,
+                    disabledBorder: border,
+                    focusedBorder: border,
+                    border: border,
+                    alignLabelWithHint: true,
+                    contentPadding: EdgeInsets.only(left: 8),
+                  ),
+                  items: stateSnapshot.hasData
+                      ? stateSnapshot.data.map((e) => e).toList()
+                      : [],
+                  onChanged: updateProviderBloc.changeState,
+                  itemAsString: (StateModel data) => data.stateAsString(),
+                  selectedItem: snap.data,
+                );
+              }),
+        );
+      });
+
+  Widget providerType() => StreamBuilder<ProviderType>(
+      stream: updateProviderBloc.type,
+      builder: (context, snap) {
+        return DropDownInput(
+          title: 'Provider Type',
+          dropdownSearch: StreamBuilder<List<ProviderType>>(
+              stream: providerTypeBloc.providerType,
+              builder: (context, typeSnapshot) {
+                return DropdownSearch<ProviderType>(
+                  mode: Mode.MENU,
+                  maxHeight: 120,
+                  dropDownButton: Icon(Icons.arrow_drop_down, color: kBlue),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: _providerTypeCntrl.text,
+                    enabledBorder: border,
+                    disabledBorder: border,
+                    focusedBorder: border,
+                    border: border,
+                    alignLabelWithHint: true,
+                    contentPadding: EdgeInsets.only(left: 8),
+                  ),
+                  items: typeSnapshot.hasData
+                      ? typeSnapshot.data.map((e) => e).toList()
+                      : [],
+                  onChanged: updateProviderBloc.changeType,
+                  itemAsString: (ProviderType data) => data.typeAsString(),
+                  selectedItem: snap.data,
+                );
+              }),
+        );
+      });
 }

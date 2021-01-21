@@ -1,3 +1,4 @@
+import 'package:prozone/src/app.dart';
 import 'package:prozone/src/models/provider_type.dart';
 import 'package:prozone/src/models/state_model.dart';
 import 'package:prozone/src/resources/repository.dart';
@@ -56,7 +57,7 @@ class CreateProviderBloc {
       "rating": _ratingController.value ?? 0,
       "description": _descriptionController.value,
       "name": _nameController.value,
-      "type": _typeController.value,
+      "provider_type": _typeController.value,
       "state": _stateController.value,
       "active_status": _activeStatusController.value ?? "Pending"
     };
@@ -65,6 +66,7 @@ class CreateProviderBloc {
 
     await repository.createProvider(data);
     _loadingData.sink.add(false);
+    navigatorKey.currentState.pushNamed('/');
   }
 
   void dispose() {

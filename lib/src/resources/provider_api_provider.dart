@@ -16,7 +16,7 @@ class ProviderApiProvider {
     dio.options.headers['authorization'] = 'Bearer $_apiKey';
 
     try {
-      response = await dio.put(baseUrl + "/providers", data: data);
+      response = await dio.post(baseUrl + "/providers", data: data);
     } on DioError catch (e) {
       if (e.response != null) {
         return State<String>.error(e.response.data['message']);
