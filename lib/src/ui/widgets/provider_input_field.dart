@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:prozone/src/ui/shared/style.dart';
 
-class ProviderDetailItem extends StatelessWidget {
-  const ProviderDetailItem({
+class ProviderInputField extends StatelessWidget {
+  const ProviderInputField({
     Key key,
     @required String title,
-    @required TextEditingController cntrl,
     @required Function(String) onChange,
-  })  : _cntrl = cntrl,
-        _title = title,
+  })  : _title = title,
         _onChange = onChange,
         super(key: key);
 
-  final TextEditingController _cntrl;
   final String _title;
   final Function(String) _onChange;
   @override
@@ -31,7 +28,6 @@ class ProviderDetailItem extends StatelessWidget {
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(color: Colors.grey.shade100),
             child: TextFormField(
-              controller: _cntrl,
               keyboardType: TextInputType.name,
               style: TextStyle(
                   color: Colors.grey.shade700, fontWeight: FontWeight.bold),

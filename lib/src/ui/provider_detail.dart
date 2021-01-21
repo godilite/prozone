@@ -170,7 +170,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
             return ProviderDetailItem(
               title: 'Provider Name',
               cntrl: _nameCntrl,
-              updateProviderBloc: updateProviderBloc,
+              onChange: updateProviderBloc.changeName,
             );
           });
 
@@ -180,9 +180,10 @@ class _ProviderDetailState extends State<ProviderDetail> {
           stream: updateProviderBloc.address,
           builder: (context, snap) {
             return ProviderDetailItem(
-                title: "Provider Address",
-                cntrl: _addressCntrl,
-                updateProviderBloc: updateProviderBloc);
+              title: "Provider Address",
+              cntrl: _addressCntrl,
+              onChange: updateProviderBloc.changeAddress,
+            );
           });
 
   Widget providerRating(
@@ -191,9 +192,10 @@ class _ProviderDetailState extends State<ProviderDetail> {
           stream: updateProviderBloc.rating,
           builder: (context, snap) {
             return ProviderDetailItem(
-                title: "Provider Rating",
-                cntrl: _ratingCntrl,
-                updateProviderBloc: updateProviderBloc);
+              title: "Provider Rating",
+              cntrl: _ratingCntrl,
+              onChange: updateProviderBloc.changeRating,
+            );
           });
 
   Widget providerDescription(
@@ -202,9 +204,10 @@ class _ProviderDetailState extends State<ProviderDetail> {
           stream: updateProviderBloc.description,
           builder: (context, snap) {
             return ProviderDetailItem(
-                title: 'Provider Description',
-                cntrl: _descriptionCntrl,
-                updateProviderBloc: updateProviderBloc);
+              title: 'Provider Description',
+              cntrl: _descriptionCntrl,
+              onChange: updateProviderBloc.changeDescription,
+            );
           });
 
   Widget providerActiveStatus(
@@ -213,8 +216,9 @@ class _ProviderDetailState extends State<ProviderDetail> {
           stream: updateProviderBloc.activeStatus,
           builder: (context, snap) {
             return ProviderDetailItem(
-                title: 'Provider Activation Status',
-                cntrl: _activeStatusCntrl,
-                updateProviderBloc: updateProviderBloc);
+              title: 'Provider Activation Status',
+              cntrl: _activeStatusCntrl,
+              onChange: updateProviderBloc.changeActiveStatus,
+            );
           });
 }

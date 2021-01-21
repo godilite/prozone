@@ -94,8 +94,32 @@ class _ProviderListState extends State<ProviderList> {
         );
       }),
       endDrawer: FilterWidget(),
+      floatingActionButton: _offsetPopup(),
     );
   }
+
+  Widget _offsetPopup() => CircleAvatar(
+        backgroundColor: kBlue,
+        radius: 25,
+        child: PopupMenuButton<String>(
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: Routes.CreateProviderRoute,
+              child: Text(
+                "Add New Provider",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          color: kBlue,
+          onSelected: (value) => Navigator.pushNamed(context, value),
+          icon: CircleAvatar(backgroundColor: kBlue, child: Icon(Icons.add)),
+          offset: Offset(-10, -110),
+        ),
+      );
 
   providerItem(ProviderModel provider) {
     return InkWell(

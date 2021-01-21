@@ -11,6 +11,13 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   SearchBloc _searchBloc = SearchBloc();
+
+  @override
+  void initState() {
+    _searchBloc.searchProviders();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +37,8 @@ class _SearchViewState extends State<SearchView> {
               child: StreamBuilder<List<ProviderModel>>(
                   stream: _searchBloc.results,
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.active &&
+                        snapshot.hasData) {
                       return snapshot.data.length > 0
                           ? ListView.builder(
                               itemCount: snapshot.data.length,

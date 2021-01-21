@@ -34,3 +34,6 @@ OutlineInputBorder searchBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(10),
   borderSide: BorderSide(color: Colors.transparent),
 );
+
+UnderlineInputBorder border =
+    UnderlineInputBorder(borderSide: BorderSide(color: kGrey));

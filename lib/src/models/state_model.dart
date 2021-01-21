@@ -24,4 +24,9 @@ class StateModel {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
+
+  ///this method will prevent the override of toString
+  String stateAsString() {
+    return '${this.name}';
+  }
 }

@@ -1,22 +1,22 @@
-import 'package:prozone/src/app.dart';
-import 'package:prozone/src/blocs/provider_bloc.dart';
+import 'package:prozone/src/models/provider_type.dart';
+import 'package:prozone/src/models/state_model.dart';
 import 'package:prozone/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class UpdateProviderBloc {
+class CreateProviderBloc {
   final BehaviorSubject _addressController = BehaviorSubject<String>();
   final BehaviorSubject _activeStatusController = BehaviorSubject<String>();
-  final BehaviorSubject _stateController = BehaviorSubject<String>();
+  final BehaviorSubject _stateController = BehaviorSubject<StateModel>();
   final PublishSubject _loadingData = PublishSubject<bool>();
   final BehaviorSubject _ratingController = BehaviorSubject<String>();
-  final BehaviorSubject _typeController = BehaviorSubject<String>();
+  final BehaviorSubject _typeController = BehaviorSubject<ProviderType>();
   final BehaviorSubject _nameController = BehaviorSubject<String>();
   final BehaviorSubject _descriptionController = BehaviorSubject<String>();
   final BehaviorSubject _hasError = BehaviorSubject<String>();
 
   Function(String) get changeAddress => _addressController.sink.add;
 
-  Function(String) get changeState => _stateController.sink.add;
+  Function(StateModel) get changeState => _stateController.sink.add;
 
   Function(String) get changeActiveStatus => _activeStatusController.sink.add;
 
@@ -26,7 +26,7 @@ class UpdateProviderBloc {
 
   Function(String) get changeRating => _ratingController.sink.add;
 
-  Function(String) get changeType => _typeController.sink.add;
+  Function(ProviderType) get changeType => _typeController.sink.add;
 
   Stream get address => _addressController.stream;
 
@@ -47,24 +47,24 @@ class UpdateProviderBloc {
 
   Stream<bool> get loading => _loadingData.stream;
 
-  void submit(id) async {
+  Stream<bool> get submitValid => Rx.combineLatest5(address, name, state,
+      description, type, (address, name, state, description, type) => true);
+
+  void submit() async {
     final data = {
       "address": _addressController.value,
-      "rating": _ratingController.value,
+      "rating": _ratingController.value ?? 0,
       "description": _descriptionController.value,
       "name": _nameController.value,
       "type": _typeController.value,
       "state": _stateController.value,
-      "active_status": _activeStatusController.value
+      "active_status": _activeStatusController.value ?? "Pending"
     };
 
-    //remove null keys or values
-    data.removeWhere((key, value) => key == null || value == null);
     _loadingData.sink.add(true);
 
-    await repository.updateProvider(data, id);
+    await repository.createProvider(data);
     _loadingData.sink.add(false);
-    providerBloc.fetchAllProviders();
   }
 
   void dispose() {
@@ -79,3 +79,5 @@ class UpdateProviderBloc {
     _stateController.close();
   }
 }
+
+final createProviderBloc = CreateProviderBloc();
