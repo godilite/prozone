@@ -59,7 +59,7 @@ class _ProviderDetailState extends State<ProviderDetail> {
                 onPressed: () async {
                   List<File> files = await _imageBloc.selectFiles();
                   Navigator.pushNamed(context, Routes.PreviewImage,
-                      arguments: {'files': files});
+                      arguments: {'files': files, 'id': id});
                 },
                 icon: Icon(Icons.image),
                 label: Text('Add Images')),

@@ -64,15 +64,6 @@ class UpdateProviderBloc {
     _loadingData.sink.add(false);
   }
 
-  // void changeImage() async {
-  //   File image = await repository.getFile();
-  //   if (image == null) {
-  //     _imageController.addError('Upload Image');
-  //   } else {
-  //     _imageController.sink.add(image);
-  //   }
-  // }
-
   void dispose() {
     _addressController.close();
     _ratingController.close();
@@ -83,6 +74,5 @@ class UpdateProviderBloc {
     _hasError.close();
     _activeStatusController.close();
     _stateController.close();
-    // _imageController.close();
   }
 }

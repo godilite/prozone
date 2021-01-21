@@ -27,3 +27,5 @@ class SearchBloc {
     _searchController.close();
   }
 }
+
+final searchBloc = SearchBloc();

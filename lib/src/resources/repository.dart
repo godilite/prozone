@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:prozone/src/models/state.dart';
 import 'package:prozone/src/resources/provider_api_provider.dart';
@@ -23,6 +25,9 @@ class Repository {
       _providerApiProvider.updateProvider(data, id);
 
   Future<List<Asset>> selectFiles() => _imageProvider.loadAssets();
+
+  Future updateImage(List<File> images, id, model) =>
+      _imageProvider.uploadProviderImages(images, id, model);
 }
 
 final repository = Repository();

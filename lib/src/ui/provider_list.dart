@@ -14,11 +14,10 @@ class ProviderList extends StatefulWidget {
 }
 
 class _ProviderListState extends State<ProviderList> {
-  ProviderBloc _providerBloc = ProviderBloc();
   @override
-  void initState() {
-    _providerBloc.fetchAllProviders();
-    super.initState();
+  void didChangeDependencies() {
+    providerBloc.fetchAllProviders();
+    super.didChangeDependencies();
   }
 
   @override
@@ -69,7 +68,7 @@ class _ProviderListState extends State<ProviderList> {
             Container(
               height: constraints.maxHeight * 0.9,
               child: StreamBuilder<List<ProviderModel>>(
-                  stream: _providerBloc.providers,
+                  stream: providerBloc.providers,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return snapshot.data.length > 0

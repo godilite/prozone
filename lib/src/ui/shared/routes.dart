@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prozone/src/ui/image_upload_preview.dart';
+import 'package:prozone/src/ui/provider_list.dart';
 import 'package:prozone/src/ui/search.dart';
 
 import '../provider_detail.dart';

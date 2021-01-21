@@ -22,3 +22,5 @@ class ProviderBloc {
     _providersController.close();
   }
 }
+
+final providerBloc = ProviderBloc();
