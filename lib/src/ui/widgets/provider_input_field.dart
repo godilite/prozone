@@ -25,6 +25,7 @@ class ProviderInputField extends StatelessWidget {
                 color: Colors.grey.shade500, fontWeight: FontWeight.bold),
           ),
           Container(
+            height: 50,
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(color: Colors.grey.shade100),
             child: TextFormField(

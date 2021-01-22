@@ -31,6 +31,7 @@ class _ProviderListState extends State<ProviderList> {
               icon: Icon(
                 Icons.sort_outlined,
                 color: kBlue,
+                size: 30,
               ),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -39,7 +40,7 @@ class _ProviderListState extends State<ProviderList> {
         ],
         centerTitle: true,
         title: Container(
-          height: 40,
+          height: 50,
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, Routes.SearchRoute),
             child: TextField(
@@ -47,6 +48,7 @@ class _ProviderListState extends State<ProviderList> {
               decoration: InputDecoration(
                   fillColor: kGrey,
                   filled: true,
+                  hintText: 'Search Providers eg: Selma Pharmacy',
                   disabledBorder: searchBorder,
                   prefixIcon: Icon(Icons.search_outlined)),
             ),
@@ -68,6 +70,7 @@ class _ProviderListState extends State<ProviderList> {
             ),
             Container(
               height: constraints.maxHeight * 0.9,
+              padding: EdgeInsets.all(10),
               child: StreamBuilder<List<ProviderModel>>(
                   stream: providerBloc.providers,
                   builder: (context, snapshot) {
@@ -104,13 +107,15 @@ class _ProviderListState extends State<ProviderList> {
         backgroundColor: kBlue,
         radius: 25,
         child: PopupMenuButton<String>(
+          elevation: 6,
           itemBuilder: (context) => [
             PopupMenuItem(
+              height: 10,
               value: Routes.CreateProviderRoute,
               child: Text(
                 "Add New Provider",
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
               ),
             ),
           ],
@@ -118,8 +123,14 @@ class _ProviderListState extends State<ProviderList> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           color: kBlue,
           onSelected: (value) => Navigator.pushNamed(context, value),
-          icon: CircleAvatar(backgroundColor: kBlue, child: Icon(Icons.add)),
-          offset: Offset(-10, -110),
+          icon: CircleAvatar(
+            backgroundColor: kBlue,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+          offset: Offset(-10, -90),
         ),
       );
 }

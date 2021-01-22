@@ -25,6 +25,10 @@ class _ImageUploadPreviewState extends State<ImageUploadPreview> {
             color: kBlue,
           ),
         ),
+        title: Text(
+          'Upload Preview',
+          style: heading,
+        ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
         return Column(children: [

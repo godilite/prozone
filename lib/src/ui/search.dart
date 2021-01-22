@@ -24,7 +24,13 @@ class _SearchViewState extends State<SearchView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            Icons.arrow_back_ios_outlined,
+            color: kBlue,
+          ),
+        ),
         title: searchInputField(),
       ),
       body: LayoutBuilder(builder: (context, constraints) {
@@ -53,6 +59,9 @@ class _SearchViewState extends State<SearchView> {
                                 style: subtrail,
                               ),
                             );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container();
                     }
                     return Center(
                         child: CircularProgressIndicator(
@@ -70,13 +79,18 @@ class _SearchViewState extends State<SearchView> {
       stream: _searchBloc.searchKeyword,
       builder: (context, snapshot) {
         return Container(
-          height: 40,
+          height: 50,
           child: TextField(
             onChanged: _searchBloc.addKeyword,
-            onEditingComplete: () => _searchBloc.searchProviders(),
+            textInputAction: TextInputAction.search,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+              _searchBloc.searchProviders();
+            },
             decoration: InputDecoration(
                 fillColor: kGrey,
                 filled: true,
+                hintText: 'Search Providers eg: Selma Pharmacy',
                 disabledBorder: searchBorder,
                 border: searchBorder,
                 enabledBorder: searchBorder,

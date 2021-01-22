@@ -23,9 +23,9 @@ class _FilterWidgetState extends State<FilterWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      elevation: 0,
+      elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(3.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -37,15 +37,24 @@ class _FilterWidgetState extends State<FilterWidget> {
                 ),
               ),
             ),
-            Text('Filter by Provider Type', style: subHeading),
+            SizedBox(
+              height: 30,
+            ),
+            Text('Provider Type', style: subHeading),
+            SizedBox(
+              height: 10,
+            ),
             typeStreamBuilder(),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
-            Text('Filter by Onboarding Status', style: subHeading),
+            Text('Onboarding Status', style: subHeading),
+            SizedBox(
+              height: 10,
+            ),
             statusStreamBuilder(),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,7 +94,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                       )
                       .toList(),
                 )
-              : Container();
+              : Container(
+                  child: CircularProgressIndicator(),
+                );
         });
   }
 

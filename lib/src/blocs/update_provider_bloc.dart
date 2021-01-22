@@ -2,6 +2,7 @@ import 'package:prozone/src/blocs/provider_bloc.dart';
 import 'package:prozone/src/models/provider_type.dart';
 import 'package:prozone/src/models/state_model.dart';
 import 'package:prozone/src/resources/repository.dart';
+import 'package:prozone/src/app.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UpdateProviderBloc {
@@ -66,6 +67,7 @@ class UpdateProviderBloc {
     await repository.updateProvider(data, id);
     _loadingData.sink.add(false);
     providerBloc.fetchAllProviders();
+    navigatorKey.currentState.pop();
   }
 
   void dispose() {

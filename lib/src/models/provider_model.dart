@@ -34,7 +34,7 @@ class ProviderModel {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        rating: json["rating"],
+        rating: json["rating"] ?? 0,
         address: json["address"],
         activeStatus: json["active_status"],
         providerType: ProviderType.fromJson(json["provider_type"]),

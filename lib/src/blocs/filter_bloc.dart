@@ -2,6 +2,7 @@ import 'package:prozone/src/blocs/provider_bloc.dart';
 import 'package:prozone/src/models/provider_type.dart';
 import 'package:prozone/src/models/state.dart';
 import 'package:prozone/src/resources/repository.dart';
+import 'package:prozone/src/ui/shared/routes.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../app.dart';
@@ -59,14 +60,14 @@ class FilterBloc {
     selectedProviderType.clear();
     selectedStatus.clear();
     providerBloc.fetchAllProviders();
-    navigatorKey.currentState.pushNamed('/');
+    navigatorKey.currentState.pushNamed(Routes.Home);
   }
 
   void resetFilter() async {
     await repository.resetFilter();
     filterBloc.fetchProviderTypes();
 
-    navigatorKey.currentState.pushNamed('/');
+    navigatorKey.currentState.pushNamed(Routes.Home);
   }
 
   void dispose() {

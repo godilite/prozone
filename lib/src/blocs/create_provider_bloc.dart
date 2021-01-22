@@ -42,12 +42,12 @@ class CreateProviderBloc {
   Stream get state => _stateController.stream;
 
   Stream get activeStatus => _activeStatusController.stream;
-  //Stream get image => _imageController.stream;
 
   Stream get hasError => _hasError.stream;
 
   Stream<bool> get loading => _loadingData.stream;
 
+//Validates that required form inputs are not empty
   Stream<bool> get submitValid => Rx.combineLatest5(address, name, state,
       description, type, (address, name, state, description, type) => true);
 

@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:prozone/src/blocs/create_provider_bloc.dart';
 import 'package:prozone/src/blocs/provider_state_bloc.dart';
 import 'package:prozone/src/blocs/provider_type_bloc.dart';
@@ -33,6 +34,10 @@ class _CreateProviderState extends State<CreateProvider> {
             Icons.arrow_back_ios_outlined,
             color: kBlue,
           ),
+        ),
+        title: Text(
+          'Create Provider',
+          style: TextStyle(color: kText),
         ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {

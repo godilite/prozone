@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,10 @@ class _ProviderDetailState extends State<ProviderDetail> {
             color: kBlue,
           ),
         ),
+        title: Text(
+          '${provider.name}',
+          style: TextStyle(color: kText),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -61,13 +66,12 @@ class _ProviderDetailState extends State<ProviderDetail> {
                 ),
                 color: kBlue,
                 textColor: Colors.white,
-                onPressed: () async {
-                  List<File> files = await _imageBloc.selectFiles();
-                  Navigator.pushNamed(context, Routes.PreviewImage,
-                      arguments: {'files': files, 'id': id});
-                },
-                icon: Icon(Icons.image),
-                label: Text('Add Images')),
+                onPressed: () => _imageBloc.selectFiles(id),
+                icon: Icon(Icons.add_a_photo),
+                label: Text(
+                  'Add Images',
+                  style: TextStyle(fontSize: 12),
+                )),
           )
         ],
       ),

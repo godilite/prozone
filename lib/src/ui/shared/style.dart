@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 
 // Colors
 
-const Color kBlue = Color(0xFF07627F);
+const Color kBlue = Color(0xFF00008B);
 const Color kYellow = Color(0xFFFAB70A);
 const Color kText = Color(0xFF282F39);
 Color kGrey = Colors.grey.shade300;
@@ -25,7 +25,8 @@ const double kSpaceM = 16.0;
 EdgeInsets bodyMargin =
     EdgeInsets.only(top: 60.0, left: 24, right: 24, bottom: 24);
 
-TextStyle heading = TextStyle(fontWeight: FontWeight.bold, fontSize: 24);
+TextStyle heading =
+    TextStyle(fontWeight: FontWeight.bold, color: kText, fontSize: 20);
 TextStyle subHeading =
     TextStyle(fontWeight: FontWeight.bold, color: kText, fontSize: 18);
 TextStyle subtrail = TextStyle(color: kGrey, fontSize: 18);

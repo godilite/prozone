@@ -18,7 +18,8 @@ class ImageBloc {
 
   Stream<bool> get loading => _loadingData.stream;
 
-  Future selectFiles() async {
+  //Select multiple image files
+  void selectFiles(id) async {
     List<Asset> assets = await repository.selectFiles();
 
     List<File> files = [];
@@ -28,11 +29,12 @@ class ImageBloc {
         final file = await writeToFile(asset); //Convert Asset to File
         files.add(file);
       }
-
-      return files;
+      navigatorKey.currentState.pushNamed(Routes.PreviewImage,
+          arguments: {'files': files, 'id': id});
     }
   }
 
+  //Converts Asset from ByteData to FIle
   Future<File> writeToFile(Asset asset) async {
     String time = DateTime.now().toIso8601String();
 
@@ -51,7 +53,7 @@ class ImageBloc {
     State state = await repository.updateImage(images, id, ref);
     if (state is SuccessState) {
       providerBloc.fetchAllProviders();
-      navigatorKey.currentState.pushNamed('/');
+      navigatorKey.currentState.pushNamed(Routes.Home);
     } else if (state is ErrorState) {
       _hasError.sink.addError(state.msg);
     }
