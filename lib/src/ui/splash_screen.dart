@@ -37,40 +37,27 @@ class _SplashState extends State<Splash> {
 
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.centerStart,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'ProZone'.toUpperCase(),
-                    style: TextStyle(
-                      color: kBlue,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 30,
-                    ),
-                  ),
-                  Container(
-                    child: Text('Manage Providers With Ease',
-                        style: TextStyle(
-                          color: kText,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 20,
-                        )),
-                  ),
-                ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'ProZone'.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kBlue,
+                fontWeight: FontWeight.w900,
+                fontSize: 30,
               ),
             ),
-            Positioned(
-              bottom: -10,
-              left: 0,
-              right: 0,
-              child: Image(
-                image: AssetImage('assets/spalshpage.png'),
-              ),
+            Container(
+              child: Text('Manage Providers With Ease',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kText,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 20,
+                  )),
             ),
           ],
         ),

@@ -10,7 +10,6 @@ import 'package:prozone/src/blocs/update_provider_bloc.dart';
 import 'package:prozone/src/models/provider_model.dart';
 import 'package:prozone/src/models/provider_type.dart';
 import 'package:prozone/src/models/state_model.dart';
-import 'package:prozone/src/ui/shared/routes.dart';
 import 'package:prozone/src/ui/shared/style.dart';
 
 import 'widgets/drop_down_input.dart';

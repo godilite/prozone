@@ -17,7 +17,7 @@ class ImageProvider {
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 4,
-        enableCamera: true,
+        enableCamera: false,
         selectedAssets: images,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
